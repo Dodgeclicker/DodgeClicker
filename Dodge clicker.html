@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dodge Clicker</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background-image: url('https://i.imgur.com/dogememe.jpg'); /* Updated Doge meme background */
+            background-size: cover;
+            background-position: center;
+            color: white;
+        }
+        #container {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 15px;
+            display: inline-block;
+            margin-top: 50px;
+        }
+        #dodgecoinCanvas {
+            width: 300px;
+            height: 300px;
+            cursor: pointer;
+            border: 5px solid gold;
+            border-radius: 50%;
+            background: radial-gradient(circle, gold, orange);
+        }
+        .shop {
+            margin-top: 20px;
+        }
+        .upgrade {
+            margin: 10px;
+            padding: 15px;
+            background: linear-gradient(45deg, gold, orange);
+            border: 2px solid white;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            color: black;
+            transition: transform 0.2s;
+        }
+        .upgrade:hover {
+            transform: scale(1.1);
+        }
+        .falling-coin {
+            position: absolute;
+            width: 40px;
+            animation: fall 1.5s linear;
+        }
+        @keyframes fall {
+            0% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(150px); }
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <h1>Dodge Clicker</h1>
+        <h2>Coins: <span id="coins">0</span></h2>
+        <canvas id="dodgecoinCanvas" width="300" height="300"></canvas>
+        <div class="shop">
+            <button class="upgrade" onclick="buyUpgrade(10, 1)">Buy Upgrade (+1 per click) - 10 coins</button>
+            <button class="upgrade" onclick="buyUpgrade(50, 5)">Buy Upgrade (+5 per click) - 50 coins</button>
+            <button class="upgrade" onclick="buyUpgrade(200, 20)">Buy Upgrade (+20 per click) - 200 coins</button>
+            <button class="upgrade" onclick="buyUpgrade(500, 50)">Buy Upgrade (+50 per click) - 500 coins</button>
+            <button class="upgrade" onclick="buyUpgrade(1000, 100)">Buy Upgrade (+100 per click) - 1000 coins</button>
+        </div>
+        <br>
+        <a href="https://x.com/Dodgeclicker" target="_blank">
+            <button class="upgrade">Visit Twitter</button>
+        </a>
+    </div>
+    <script>
+        let coins = 0;
+        let coinsPerClick = 1;
+
+        const canvas = document.getElementById("dodgecoinCanvas");
+        const ctx = canvas.getContext("2d");
+        const img = new Image();
+        img.src = "https://upload.wikimedia.org/wikipedia/en/d/d0/Dogecoin_Logo.png";
+        img.onload = function() {
+            ctx.drawImage(img, 0, 0, 300, 300);
+        };
+        
+        canvas.addEventListener("click", function() {
+            earnCoins();
+        });
+
+        function earnCoins() {
+            coins += coinsPerClick;
+            document.getElementById('coins').innerText = coins;
+            spawnCoinEffect();
+        }
+
+        function buyUpgrade(cost, bonus) {
+            if (coins >= cost) {
+                coins -= cost;
+                coinsPerClick += bonus;
+                document.getElementById('coins').innerText = coins;
+            } else {
+                alert("Not enough coins!");
+            }
+        }
+
+        function spawnCoinEffect() {
+            let coin = document.createElement("img");
+            coin.src = "https://upload.wikimedia.org/wikipedia/en/d/d0/Dogecoin_Logo.png";
+            coin.className = "falling-coin";
+            coin.style.left = Math.random() * window.innerWidth + "px";
+            coin.style.top = "100px";
+            document.body.appendChild(coin);
+            setTimeout(() => { document.body.removeChild(coin); }, 1500);
+        }
+    </script>
+</body>
+</html>
